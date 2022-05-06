@@ -2,14 +2,17 @@
 #Imports
 
 from flask import Flask, request, render_template
+
 from flask_sqlalchemy import SQLAlchemy
+
 
 #Configurations
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:123456789@localhost:5432/appointments'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres@localhost:5432/appointments"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
+
 
 class Animals(db.Model):
     __tablename__ = 'Appointments'

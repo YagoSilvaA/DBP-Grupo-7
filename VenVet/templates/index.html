@@ -11,4 +11,13 @@
 
         <input type="submit" value="Registrar"/>
     </form>
+    <form method="POST" action="./delete">
+        <input type="text"  name="name">
+        <input type="submit" value="Delete">
+      </form>
+      <h1>Citas</h1>
+    {% for appointment in appointments %}
+      <p>{{appointments.name}}</p>
+    {% endfor %}
+
 {% endblock %}

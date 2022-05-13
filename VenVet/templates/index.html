@@ -1,23 +1,43 @@
-{% block content %}
-    <form action="/create" method="post">
-        <label for="name">Nombre: </label>
-        <input type="text" id="name" name="name" /><br>
-        
-        <label for="pet">Pet: </label>
-        <input type="text" id="pet" name="pet" /><br>
-        
-        <label for="date">Date: </label>
-        <input type="datetime-local" id="date" name="date" /><br>
+<body>
+  <title>VenVet</title>
+</body>
 
-        <input type="submit" value="Registrar"/>
-    </form>
-    <form method="POST" action="./delete">
-        <input type="text"  name="name">
-        <input type="submit" value="Delete">
-      </form>
-      <h1>Citas</h1>
-    {% for appointment in appointments %}
-      <p>{{appointments.name}}</p>
-    {% endfor %}
-
+<p>{% block content %}</p>
+<form action="/create" method="post">
+<h1 style="text-align: center;"><span style="color: #008000;">VenVet</span></h1>
+<h2 style="text-align: left;"><span style="color: #333399;">Nueva Cita</span></h2>
+<h4><label for="name">Nombre: </label> <input id="name" name="name" type="text" /></h4>
+<h4><label for="pet">Raza: </label> <input id="pet" name="pet" type="text" /><br /><label for="date"></label></h4>
+<h4><label for="date">Fecha y Hora: </label> <input id="date" name="date" type="datetime-local" /></h4>
+<p><input type="submit" value="Registrar" /></p>
+<hr /></form><form action="./delete" method="POST">
+<h2><span style="color: #333399;">Eliminar Cita</span></h2>
+<p><input name="name" type="text" /> <input type="submit" value="Delete" /></p>
+<hr />
+<h2><span style="color: #333399;">Citas</span></h2>
+<div>
+<table style="height: 18px; width: 100%; border-collapse: collapse; float: right;" border="1">
+<tbody>
+<tr style="height: 18px;">
+<td style="width: 26.5938%; height: 18px;"><strong><span style="color: #008000;">Name</span></strong></td>
+<td style="width: 30.601%; height: 18px;"><strong><span style="color: #008000;">Pet</span></strong></td>
+<td style="width: 42.8051%; height: 18px; text-align: right;"><strong><span style="color: #008000;">Date</span></strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>{% for appointments in appointments %}</div>
+<div>
+<table style="border-collapse: collapse; width: 100%; height: 20px;" border="1">
+<tbody>
+<tr style="height: 55px;">
+<td style="width: 26.5938%; height: 20px;">{{appointments.name}}</td>
+<td style="width: 30.601%; height: 20px;">{{appointments.pet}}</td>
+<td style="width: 42.8051%; height: 20px; text-align: right;">{{appointments.date}}</td>
+</tr>
+</tbody>
+</table>
+{% endfor %}
 {% endblock %}
+</div>
+</form>

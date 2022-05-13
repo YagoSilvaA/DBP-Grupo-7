@@ -32,6 +32,7 @@ db.create_all()
 appointments = Appointments.query.all()
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    appointments = Appointments.query.all()
     return render_template("index.html", appointments = appointments)
 
 @app.route('/create', methods = ['GET', 'POST'])

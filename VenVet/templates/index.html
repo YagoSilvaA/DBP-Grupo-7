@@ -12,7 +12,7 @@
 <p><input type="submit" value="Registrar" /></p>
 <hr /></form><form action="./delete" method="POST">
 <h2><span style="color: #333399;">Eliminar Cita</span></h2>
-<p><input name="name" type="text" /> <input type="submit" value="Delete" /></p>
+<p><input name="name" type="text" /> <input type="submit" value="Delete" /></p> </form>
 <hr />
 <h2><span style="color: #333399;">Citas</span></h2>
 <div>
@@ -34,10 +34,19 @@
 <td style="width: 26.5938%; height: 20px;">{{appointments.name}}</td>
 <td style="width: 30.601%; height: 20px;">{{appointments.pet}}</td>
 <td style="width: 42.8051%; height: 20px; text-align: right;">{{appointments.date}}</td>
+
+
+
 </tr>
+
 </tbody>
+
 </table>
+<form method="POST" action="./updatedate">
+  <input type="hidden" value="{{appointments.date}}" name="olddate">
+    <input type="datetime-local"  name="newdate">
+    <input type="submit" value="Update Date">
+</form>
 {% endfor %}
 {% endblock %}
 </div>
-</form>

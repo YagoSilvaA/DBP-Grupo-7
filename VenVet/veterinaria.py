@@ -1,6 +1,7 @@
 
 #Imports
 ##from crypt import methods
+##from crypt import methods
 from email.policy import default
 from flask import (
     Flask,
@@ -54,7 +55,17 @@ def delete():
     animal = Appointments.query.filter_by(name = name).first()
     db.session.delete(animal)
     db.session.commit()
-    return redirect('/')  
+    return redirect('/')
+
+
+@app.route('/updatedate', methods = ['POST'])
+def updatedate():
+    newdate = request.form.get("newdate")
+    olddate = request.form.get("olddate")
+    appointment = Appointments.query.filter_by(date=olddate).first()
+    appointment.date = newdate
+    db.session.commit()
+    return redirect('/')
 #Run Script
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

@@ -3,6 +3,7 @@
 ##from crypt import methods
 ##from crypt import methods
 from email.policy import default
+from typing import final
 from flask import (
     Flask,
     redirect,
@@ -12,6 +13,13 @@ from flask import (
 )
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_login import (
+    UserMixin, 
+    login_user, 
+    LoginManager, 
+    login_required, 
+    logout_user, 
+    current_user)
 import sys
 
 #Configurations
@@ -21,6 +29,11 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
+#Models
+
+class Users(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key = True)
+    username = db.Column(db.String(50), nullable = False, unique = True)
 
 class Appointments(db.Model):
     __tablename__ = 'Appointments'
@@ -30,6 +43,7 @@ class Appointments(db.Model):
     date = db.Column(db.DateTime)
         
 db.create_all()
+## CRUD
 appointments = Appointments.query.all()
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -38,14 +52,19 @@ def index():
 
 @app.route('/create', methods = ['GET', 'POST'])
 def insert():
-    if request.method=='POST':
-        name = request.form.get('name')
-        pet = request.form['pet']
-        date = request.form['date']
-    animal = Appointments(name=name, pet=pet, date=date)
-    db.session.add(animal)
-    db.session.commit()
-    db.session.close()
+    try:
+        if request.method=='POST':
+            name = request.form.get('name')
+            pet = request.form['pet']
+            date = request.form['date']
+            animal = Appointments(name=name, pet=pet, date=date)
+            db.session.add(animal)
+            db.session.commit()
+    except:
+
+        db.session.rollback()
+    finally:
+        db.session.close()
 
     return redirect('/')        
 
@@ -66,6 +85,22 @@ def updatedate():
     appointment.date = newdate
     db.session.commit()
     return redirect('/')
+
+
+#Error handling
+
+@app.errorhandler(404)
+def error404(e):
+    return render_template("404.html"), 404
+
+@app.errorhandler(500)
+def error500(e):
+    return render_template("500.html"), 500
+
+# user page
+@app.route('/user/<username>')
+def user(username):
+    return render_template('user.html', username = username)
 #Run Script
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

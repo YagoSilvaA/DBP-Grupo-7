@@ -13,9 +13,12 @@
 <h4><label for="pet">Raza: </label> <input id="pet" name="pet" type="text" /><br /><label for="date"></label></h4>
 <h4><label for="date">Fecha y Hora: </label> <input id="date" name="date" type="datetime-local" /></h4>
 <p><input type="submit" value="Registrar" /></p>
-<hr /></form><form action="./delete" method="POST">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+<hr /></form>
+<form action="./delete" method="POST">
 <h2><span style="color: #333399;">Eliminar Cita</span></h2>
-<p><input name="name" type="text" /> <input type="submit" value="Delete" /></p> </form>
+<p><input name="name" type="text" /> <input type="submit" value="Delete" /></p>
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> </form>
 <hr />
 <h2><span style="color: #333399;">Citas</span></h2>
 <div>
@@ -49,6 +52,7 @@
   <input type="hidden" value="{{appointments.date}}" name="olddate">
     <input type="datetime-local"  name="newdate">
     <input type="submit" value="Update Date">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 </form>
 {% endfor %}
 {% endblock %}

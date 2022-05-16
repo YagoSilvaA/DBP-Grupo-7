@@ -6,7 +6,6 @@
 from hashlib import new
 import os
 from email.policy import default
-from turtle import left
 from typing import final
 from config import Config
 from flask_wtf.csrf import CSRFProtect
@@ -138,7 +137,7 @@ def insert():
             db.session.add(animal)
             db.session.commit()
     except:
-
+        flash("Llenar todos los datos")
         db.session.rollback()
     finally:
         db.session.close()
@@ -153,6 +152,7 @@ def delete():
         db.session.delete(animal)
         db.session.commit()
     except:
+        flash("Usuario no encontrado")
         db.session.rollback()
     finally:
         db.session.close()

@@ -1,61 +1,69 @@
 {% extends 'base.html' %}
 
+  <body>
+    <title>VenVet</title>
+  </body>
 
-<body>
-  <title>VenVet</title>
-</body>
-
-<p>{% block content %}</p>
-<form action="/create" method="post">
-<h1 style="text-align: center;"><span style="color: #008000;">VenVet</span></h1>
-<h2 style="text-align: left;"><span style="color: #333399;">Nueva Cita</span></h2>
-<h4><label for="name">Nombre: </label> <input id="name" name="name" type="text" /></h4>
-<h4><label for="pet">Raza: </label> <input id="pet" name="pet" type="text" /><br /><label for="date"></label></h4>
-<h4><label for="date">Fecha y Hora: </label> <input id="date" name="date" type="datetime-local" /></h4>
-<p><input type="submit" value="Registrar" /></p>
-<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-<hr /></form>
-<form action="./delete" method="POST">
-<h2><span style="color: #333399;">Eliminar Cita</span></h2>
-<p><input name="name" type="text" /> <input type="submit" value="Delete" /></p>
-<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> </form>
-<hr />
-<h2><span style="color: #333399;">Citas</span></h2>
-<div>
-<table style="height: 18px; width: 100%; border-collapse: collapse; float: right;" border="1">
-<tbody>
-<tr style="height: 18px;">
-<td style="width: 26.5938%; height: 18px;"><strong><span style="color: #008000;">Name</span></strong></td>
-<td style="width: 30.601%; height: 18px;"><strong><span style="color: #008000;">Pet</span></strong></td>
-<td style="width: 42.8051%; height: 18px; text-align: right;"><strong><span style="color: #008000;">Date</span></strong></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div>{% for appointments in appointments %}</div>
-<div>
-<table style="border-collapse: collapse; width: 100%; height: 20px;" border="1">
-<tbody>
-<tr style="height: 55px;">
-<td style="width: 26.5938%; height: 20px;">{{appointments.name}}</td>
-<td style="width: 30.601%; height: 20px;">{{appointments.pet}}</td>
-<td style="width: 42.8051%; height: 20px; text-align: right;">{{appointments.date}}</td>
-
-
-
-</tr>
-
-</tbody>
-
-</table>
-<form method="POST" action="./updatedate">
-
-  <input type="hidden" value="{{appointments.date}}" name="olddate">
-  <input type="hidden" value="{{appointments.id}}" name="appid">
-    <input type="datetime-local"  name="newdate">
-    <input type="submit" value="Update Date">
+  <p>{% block content %}</p>
+  <form action="/create" method="post">
+    <h1 style="text-align: center;"><span style="color: #008000;">VenVet</span></h1>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <br/>
+        {% for message in messages %}
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>{{ message }}</strong>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <h2 style="text-align: left;"><span style="color: #333399;">Nueva Cita</span></h2>
+    <h4><label for="name">Nombre: </label> <input id="name" name="name" type="text" /></h4>
+    <h4><label for="pet">Especie: </label> <input id="pet" name="pet" type="text" /><br /><label for="date"></label></h4>
+    <h4><label for="date">Fecha y Hora: </label> <input id="date" name="date" type="datetime-local" /></h4>
+    <p><input type="submit" value="Registrar" /></p>
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-</form>
-{% endfor %}
+    <hr/>
+  </form>
+  <h2><span style="color: #333399;">Citas</span></h2>
+  <div>
+    <table style="height: 18px; width: 100%; border-collapse: collapse; float: right;" border="1">
+      <tbody>
+        <tr style="height: 18px;">
+          <td style="width: 26.5938%; height: 18px;"><strong><span style="color: #008000;">Name</span></strong></td>
+          <td style="width: 30.601%; height: 18px;"><strong><span style="color: #008000;">Pet</span></strong></td>
+          <td style="width: 42.8051%; height: 18px; text-align: right;"><strong><span style="color: #008000;">Date</span></strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div>{% for appointments in appointments %}</div>
+
+  <div>
+    <table style="border-collapse: collapse; width: 100%; height: 20px;" border="1">
+      <tbody>
+        <tr style="height: 55px;">
+          <td style="width: 26.5938%; height: 20px;">{{appointments.name}}</td> 
+          <td style="width: 30.601%; height: 20px;">{{appointments.pet}}</td>
+          <td style="width: 42.8051%; height: 20px; text-align: right;">{{appointments.date}}</td>
+        </tr>
+      </tbody>
+    </table>  
+    <form method="POST" action="./updatedate">
+      <input type="hidden" value="{{appointments.date}}" name="olddate">
+      <input type="hidden" value="{{appointments.id}}" name="appid">
+      <input type="datetime-local"  name="newdate">
+      <input type="submit" value="Update Date">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    </form>
+    {% endfor %}
+    <hr/>
+    <form action="./delete" method="POST">
+      <h2><span style="color: #333399;">Eliminar Cita</span></h2>
+      <p><input name="name" type="text" /> <input type="submit" value="Delete"/></p>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> 
+    </form>
+  </div>
 {% endblock %}
-</div>
+

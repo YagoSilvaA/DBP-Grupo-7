@@ -2,7 +2,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 # Correr estos 2 comandos para configurar la BD:
 # export DATABASE_URL="postgresql://postgres:123456789@localhost/appointments"
-# export APP_SETTINGS = "Config.DevelopmentConfig"
+# export APP_SETTINGS="config.DevelopmentConfig"
 
 class Config(object):
     DEBUG = False

@@ -49,7 +49,9 @@
 
 </table>
 <form method="POST" action="./updatedate">
+
   <input type="hidden" value="{{appointments.date}}" name="olddate">
+  <input type="hidden" value="{{appointments.id}}" name="appid">
     <input type="datetime-local"  name="newdate">
     <input type="submit" value="Update Date">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>

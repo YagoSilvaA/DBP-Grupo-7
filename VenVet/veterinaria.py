@@ -3,8 +3,10 @@
 ##from crypt import methods
 ##from crypt import methods
 
+from hashlib import new
 import os
 from email.policy import default
+from turtle import left
 from typing import final
 from config import Config
 from flask_wtf.csrf import CSRFProtect
@@ -118,11 +120,11 @@ db.create_all()
 def Loginroute():
     return redirect(url_for('login'))
 
-appointments = Appointments.query.all()
+
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
-    appointments = Appointments.query.all()
+    appointments = Appointments.query.order_by(Appointments.date.asc()).all()
     return render_template("index.html", appointments = appointments)
 
 @app.route('/create', methods = ['GET', 'POST'])
@@ -159,11 +161,17 @@ def delete():
 
 @app.route('/updatedate', methods = ['POST'])
 def updatedate():
-    newdate = request.form.get("newdate")
-    olddate = request.form.get("olddate")
-    appointment = Appointments.query.filter_by(date=olddate).first()
-    appointment.date = newdate
-    db.session.commit()
+    try:
+        
+        newdate = request.form.get("newdate")
+        appid = request.form.get("appid")
+     
+        appointment = Appointments.query.filter_by(id=appid).first()
+        appointment.date = newdate
+        db.session.commit()
+        print()
+    except:
+        db.session.rollback
     return redirect('/index')
 
 
@@ -202,6 +210,18 @@ def login():
     else:
         return render_template('auth/login.html')
 
+@app.route('/register', methods = ['GET','POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        if Appointments.query.filter_by(name = username) == None:
+            flash("Already an existing user")
+        else:
+            hash_password = generate_password_hash(request.form.get('password'))
+            user = Users(0, username, hash_password)
+            db.session.add(user)
+
+    return render_template('auth/login.html')
 # user page
 
 @app.route('/user/')

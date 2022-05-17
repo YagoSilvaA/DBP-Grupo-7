@@ -55,14 +55,7 @@ class Users(db.Model, UserMixin):
     username = db.Column(db.String(50), nullable = False, unique = True)
     password = db.Column(db.String(150), nullable = False)
     
-    #Error handling
-    #@property
-    #def password(self):
-        #raise AttributeError('Password Attribute Error (Not Readable)')
-
-    #@password.setter
-    #def password(self, password):
-    #   self.password = generate_password_hash(password)
+    
     def __init__(self, id, username, password) -> None:
             self.id = id
             self.username = username
@@ -131,14 +124,35 @@ def index():
 def insert():
     try:
         if request.method=='POST':
+            con = psycopg2.connect(database='appointments', user = 'postgres', password = '123456789')
+            cursor = con.cursor()
             name = request.form.get('name')
             pet = request.form['pet']
             date = request.form['date']
-            animal = Appointments(name=name, pet=pet, date=date)
-            db.session.add(animal)
-            db.session.commit()
+        
+            if len(name)<=0:
+                flash('Ingresar nombre')
+            if len(pet) <= 0:
+                flash('Ingresar Animal/raza')
+            if len(date) <= 0:
+                flash('Ingresar fecha')
+            nxdate = date[0:10]
+            nxdate2 = date[11:13]
+            nxdate3 = nxdate + ' ' + nxdate2
+            sql = """SELECT FROM "Appointments" WHERE to_char(date,'yyyy-mm-dd HH24')='{}' """.format(nxdate3)
+            cursor.execute(sql)
+            row = cursor.fetchall()
+        
+            if row:
+                flash('Ya existe una cita a esa fecha y hora')
+                return redirect(url_for('index'))
+            else:
+                animal = Appointments(name=name, pet=pet, date=date)
+                db.session.add(animal)
+                db.session.commit()
+                return redirect(url_for('/index'))
     except:
-        flash("Llenar todos los datos")
+        
         db.session.rollback()
     finally:
         db.session.close()
@@ -173,7 +187,7 @@ def updatedate():
         nxdate3 = nxdate + ' ' + nxdate2
         
         sql = """SELECT FROM "Appointments" WHERE to_char(date,'yyyy-mm-dd HH24')='{}' """.format(nxdate3)
-        print(sql)
+       
         cursor.execute(sql)
         row = cursor.fetchall()
         
@@ -229,7 +243,7 @@ def login():
 def register():
     if request.method == 'POST':
         username = request.form.get('username')
-        if Users.query.filter_by(username = username) == None:
+        if Users.query.filter_by(username = username).first() != None:
             flash("Already an existing user")
         else:
             hash_password = generate_password_hash(request.form.get('password'))

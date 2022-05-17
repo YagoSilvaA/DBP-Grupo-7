@@ -23,6 +23,7 @@ Proyectarnos a tener la plataforma con un host en la nube mejorando el tiempo en
 
 **Informacion de librerias/frameworks/plugins**
 Hemos hecho uso del framework Bootstrap v5 
+
 Las librerias son:
 alembic==1.7.7
 click==8.1.3
@@ -44,7 +45,7 @@ Werkzeug==2.1.2
 WTForms==3.0.1
 zipp==3.8.0
 
-Estas tambien se pueden enontrar en el archivo requirements.txt.
+Estas tambien se pueden enontrar en el archivo requirements.txt para su correcta instalacion.
 
 **Pasos para ejecutar la app**
 Ejecutar estos comandos en Bash:

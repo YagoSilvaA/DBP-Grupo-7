@@ -118,7 +118,7 @@ db.create_all()
 ## CRUD
 @app.route('/')
 def Loginroute():
-    return redirect(url_for('login'))
+    return redirect(url_for('register'))
 
 
 @app.route('/index', methods=['GET', 'POST'])
@@ -163,14 +163,28 @@ def delete():
 @app.route('/updatedate', methods = ['POST'])
 def updatedate():
     try:
+        con = psycopg2.connect(database='appointments', user = 'postgres', password = '123456789')
+        cursor = con.cursor()
         
+
         newdate = request.form.get("newdate")
-        appid = request.form.get("appid")
-     
-        appointment = Appointments.query.filter_by(id=appid).first()
-        appointment.date = newdate
-        db.session.commit()
-        print()
+        nxdate = newdate[0:10]
+        nxdate2 = newdate[11:13]
+        nxdate3 = nxdate + ' ' + nxdate2
+        
+        sql = """SELECT FROM "Appointments" WHERE to_char(date,'yyyy-mm-dd HH24')='{}' """.format(nxdate3)
+        print(sql)
+        cursor.execute(sql)
+        row = cursor.fetchall()
+        
+        if row:
+            flash('Ya existe una cita a esa fecha y hora')
+        else:
+            appid = request.form.get("appid")
+            appointment = Appointments.query.filter_by(id=appid).first()
+            appointment.date = newdate
+            db.session.commit()
+    
     except:
         db.session.rollback
     return redirect('/index')
@@ -222,6 +236,7 @@ def register():
             user = Users( None ,username, hash_password)
             db.session.add(user)
             db.session.commit()
+            return redirect(url_for('login'))
 
     return render_template('auth/register.html')
 # user page

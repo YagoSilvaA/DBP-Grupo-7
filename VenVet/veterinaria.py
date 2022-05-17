@@ -51,7 +51,7 @@ csrf = CSRFProtect()
 
 class Users(db.Model, UserMixin):
     __tablename__ = 'Users'
-    id = db.Column(db.Integer, primary_key = True)
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     username = db.Column(db.String(50), nullable = False, unique = True)
     password = db.Column(db.String(150), nullable = False)
     
@@ -67,6 +67,7 @@ class Users(db.Model, UserMixin):
             self.id = id
             self.username = username
             self.password = password
+    
             
     @classmethod
     def password_verification(self, hashed_password, password):
@@ -214,14 +215,15 @@ def login():
 def register():
     if request.method == 'POST':
         username = request.form.get('username')
-        if Appointments.query.filter_by(name = username) == None:
+        if Users.query.filter_by(username = username) == None:
             flash("Already an existing user")
         else:
             hash_password = generate_password_hash(request.form.get('password'))
-            user = Users(0, username, hash_password)
+            user = Users( None ,username, hash_password)
             db.session.add(user)
+            db.session.commit()
 
-    return render_template('auth/login.html')
+    return render_template('auth/register.html')
 # user page
 
 @app.route('/user/')

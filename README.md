@@ -25,8 +25,8 @@ Proyectarnos a tener la plataforma con un host en la nube mejorando el tiempo en
 **Pasos para ejecutar la app**
 Ejecutar estos comandos en Bash:
 
-export DATABASE_URL="postgresql://postgres:123456789@localhost/appointments"
+`export DATABASE_URL="postgresql://postgres:123456789@localhost/appointments"`
 
-export APP_SETTINGS = "config.DevelopmentConfig"
+`export APP_SETTINGS="config.DevelopmentConfig"`
 
-Luego, python veterinaria.py
+`Luego, python veterinaria.py`

@@ -1,8 +1,6 @@
-
 #Imports
-##from crypt import methods
-##from crypt import methods
 
+from collections import UserList
 from hashlib import new
 import os
 from email.policy import default
@@ -26,7 +24,8 @@ from flask_login import (
     LoginManager, 
     login_required, 
     logout_user, 
-    current_user)
+    current_user
+)
 import psycopg2
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -54,14 +53,13 @@ class Users(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     username = db.Column(db.String(50), nullable = False, unique = True)
     password = db.Column(db.String(150), nullable = False)
-    
-    
+  
+
     def __init__(self, id, username, password) -> None:
             self.id = id
             self.username = username
             self.password = password
-    
-            
+      
     @classmethod
     def password_verification(self, hashed_password, password):
         return check_password_hash(hashed_password, password)
@@ -106,7 +104,7 @@ class Appointments(db.Model):
     name = db.Column(db.String(100), nullable = False)
     pet = db.Column(db.String(100), nullable = False)
     date = db.Column(db.DateTime)
-        
+
 db.create_all()
 ## CRUD
 @app.route('/')

@@ -36,10 +36,10 @@
         <table class="table table-hover table-striped">
           <thead class="table-warning">
             <tr>
-              <th>Name</th>
-              <th>Pet</th>
-              <th>Date</th>
-              <th>Update Date</th>
+              <th>Nombre</th>
+              <th>Especie</th>
+              <th>Fecha y Hora</th>
+              <th>Change Date </th>
             </tr>
           </thead>
           <tbody>
@@ -52,7 +52,7 @@
                 <input type="hidden" value="{{appointments.date}}" name="olddate">
                 <input type="hidden" value="{{appointments.id}}" name="appid">
                 <input type="datetime-local"  name="newdate">
-                <input type="submit" value="Update Date">
+                <input type="submit" value="Change Date">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
               </form>
             </td>

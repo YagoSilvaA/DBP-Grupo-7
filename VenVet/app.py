@@ -169,16 +169,37 @@ def insert():
 
 @app.route('/delete', methods = ['POST'])
 def delete():
+  #  try:
+  #      name = request.form.get('name')
+  #      animal = Appointments.query.filter_by(name = name).first()
+  #      db.session.delete(animal)
+  #      db.session.commit()
+  #  except:
+  #      flash("Usuario no encontrado")
+  #      db.session.rollback()
+  #  finally:
+  #      db.session.close()
+
     try:
         name = request.form.get('name')
+        usuario = request.form['owner']
         animal = Appointments.query.filter_by(name = name).first()
-        db.session.delete(animal)
-        db.session.commit()
+        user_id = Appointments.query.filter_by(owner_id = usuario).first()
+        if animal != None:
+            if user_id == animal: 
+                db.session.delete(animal)
+                db.session.commit()
+            else:
+                flash("No eres su dueño")
+        else:
+            flash("Mascota no encontrada ")
+
     except:
-        flash("Usuario no encontrado")
         db.session.rollback()
+
     finally:
-        db.session.close()
+         db.session.close()
+
     return redirect('/index')
 
 

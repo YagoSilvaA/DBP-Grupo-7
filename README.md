@@ -9,9 +9,14 @@
 
 **Descripción del proyecto.**
 
-El proyecto consiste en crear una plataforma que lleve el registro de una Veterinaria, esta contará con opciones de registro de una nueva mascota, entrada/salida de la mascota y la opción de borrar los datos de la base de datos.
+El proyecto tiene como finalidad el crear una plataforma en la cual se pueda llevar adecuadamente el control de citas dentro de una veterinaria
+esta contara con un seccion donde se podran visualizar todas las citas asi como las fecha y la hora, tambien se dara a conocer la informacion 
+del animal, como nombre y especie. 
 
 **Objetivos principales** 
+
+El proyecto tiene como objetivo principal el poder solucionar el problema de no tener un buen control de citas en veterinarias, se planea implementar
+una plataforma en la cual la entidad pueda avisar al cliente de cuando se agendo la cita y si se llegara a cambiar la fecha notificarle.
 
 **Misión**
 

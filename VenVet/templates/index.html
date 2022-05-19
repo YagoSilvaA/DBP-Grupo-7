@@ -22,6 +22,7 @@
         <input id="pet" name="pet" type="text" /><br/><label for="date"></label></h4>
     <h4><label for="date"><p style = "font-family:Helvetica Neue;">Fecha y Hora: </label> 
         <input id="date" name="date" type="datetime-local" /></h4>
+        <input type="hidden" value="{{current_user.username}}" name="owner">      
     <p><input type="submit" value="Registrar" style = "font-family:Helvetica Neue;"/></p>
     <p style = "font-family:Helvetica Neue;">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/></p>
@@ -36,15 +37,17 @@
         <table class="table table-hover table-striped">
           <thead class="table-warning">
             <tr>
+              <th>Dueño</th>
               <th>Nombre</th>
               <th>Especie</th>
               <th>Fecha y Hora</th>
-              <th>Change Date </th>
+              <th>Cambiar Fecha</th>
             </tr>
           </thead>
           <tbody>
             {% for appointments in appointments %}
             <tr>
+              <td>{{appointments.owner_id}}</td>
               <td>{{appointments.name}}</td>
               <td>{{appointments.pet}}</td>
               <td>{{appointments.date}}</td>
@@ -52,7 +55,7 @@
                 <input type="hidden" value="{{appointments.date}}" name="olddate">
                 <input type="hidden" value="{{appointments.id}}" name="appid">
                 <input type="datetime-local"  name="newdate">
-                <input type="submit" value="Change Date">
+                <input type="submit" value="Cambiar Fecha">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
               </form>
             </td>
@@ -67,6 +70,7 @@
   <form action="./delete" method="POST">
     <h2><span style="color: #163F70;"><p style = "font-family:Helvetica Neue;">Eliminar Cita</span></h2>
       <p style = "font-family:Helvetica Neue;">
+        <input type="hidden" value="{{current_user.username}}" name="owner">  
         <input name="name" type="text" class="form-control-sm" placeholder="Nombre" aria-label="Username"/>
         <input type="submit" value="Delete"/></p>
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> 

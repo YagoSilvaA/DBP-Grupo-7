@@ -4,7 +4,10 @@ from collections import UserList
 from hashlib import new
 import os
 from email.policy import default
+import re
+from sqlite3 import Row
 from typing import final
+from xmlrpc.client import TRANSPORT_ERROR
 from config import Config
 from flask_wtf.csrf import CSRFProtect
 from flask import (
@@ -48,13 +51,22 @@ def load_user(id):
 csrf = CSRFProtect()
 
 #Models
+class Appointments(db.Model):
+    __tablename__ = 'Appointments'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable = False)
+    pet = db.Column(db.String(100), nullable = False)
+    date = db.Column(db.DateTime)
+    owner_id = db.Column(db.String, db.ForeignKey('Users.username'))
+
+
 
 class Users(db.Model, UserMixin):
     __tablename__ = 'Users'
-    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(50), nullable = False, unique = True)
     password = db.Column(db.String(150), nullable = False)
-  
+    citas = db.relationship('Appointments', backref='owner')
 
     def __init__(self, id, username, password) -> None:
             self.id = id
@@ -99,13 +111,6 @@ class Users(db.Model, UserMixin):
         except psycopg2.DatabaseError as e:
             raise Exception(e)
 
-class Appointments(db.Model):
-    __tablename__ = 'Appointments'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable = False)
-    pet = db.Column(db.String(100), nullable = False)
-    date = db.Column(db.DateTime)
-
 db.create_all()
 ## CRUD
 @app.route('/')
@@ -128,13 +133,17 @@ def insert():
             name = request.form.get('name')
             pet = request.form['pet']
             date = request.form['date']
+            owner_id = request.form['owner']
         
             if len(name)<=0:
                 flash('Ingresar nombre')
+                return redirect(url_for('/index'))
             if len(pet) <= 0:
                 flash('Ingresar Animal/raza')
+                return redirect(url_for('/index'))
             if len(date) <= 0:
                 flash('Ingresar fecha')
+                return redirect(url_for('/index'))            
             nxdate = date[0:10]
             nxdate2 = date[11:13]
             nxdate3 = nxdate + ' ' + nxdate2
@@ -146,7 +155,7 @@ def insert():
                 flash('Ya existe una cita a esa fecha y hora')
                 return redirect(url_for('index'))
             else:
-                animal = Appointments(name=name, pet=pet, date=date)
+                animal = Appointments(name=name, pet=pet, date=date, owner_id=owner_id)
                 db.session.add(animal)
                 db.session.commit()
                 return redirect(url_for('/index'))

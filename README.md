@@ -59,4 +59,4 @@ Ejecutar estos comandos en Bash:
 
 `export APP_SETTINGS="config.DevelopmentConfig"`
 
-`Luego, python veterinaria.py`
+`Luego, python app.py`
